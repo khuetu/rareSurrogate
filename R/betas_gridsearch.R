@@ -35,6 +35,7 @@
 #' head(results, 10)
 #' @export
 betas_gridsearch <- function(N, grid, targets, betas_fixed, pX) {
+  ## POSSIBLE IMPROVEMENT: SEED
   num_features <- length(pX)
   pX <- sort(pX, decreasing = TRUE) ## sort from least- to most-frequent features
   simulate_metrics <- function(N, beta0, beta_surr, pYstar) {
