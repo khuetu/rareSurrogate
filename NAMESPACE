@@ -2,6 +2,7 @@
 
 export(auc_ipw)
 export(betas_gridsearch)
+export(calc_Ropt)
 export(expit)
 export(sim_data)
 export(sim_sgs_val)
