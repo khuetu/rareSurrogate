@@ -1,0 +1,21 @@
+Package: rareSurrogate
+Type: Package
+Title: Surrogate-Guided Sampling and Inference for Partially Observed Outcomes
+Version: 0.1.0
+Authors@R: c(
+    person(
+      "Khue Tu", "Tran",
+      email = "trantk25@wfu.edu",
+      role = c("aut", "cre")
+    )
+  )
+Description: Provides a framework for studying classification of rare outcomes under partial validation settings using surrogate variables. 
+  The methods are derived from Tan and Heagerty (2019), who proposed efficient sampling strategies for rare outcomes using surrogate variables in electronic medical record (EMR) data.
+  The package includes tools to simulate high-dimensional binary data, implement surrogate-guided sampling (SGS) and simple random sampling (SRS) designs, 
+  and evaluate predictive models under outcome missingness. Methods include inverse probability weighting (IPW) for bias correction and functions for estimating performance metrics such as AUROC under complex sampling designs.
+License: Apache License 2.0
+Encoding: UTF-8
+Imports:
+  stats,
+  dplyr,
+RoxygenNote: 7.3.3

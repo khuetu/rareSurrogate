@@ -1,0 +1,35 @@
+#' Surrogate-Guided Sampling and Inference for Partially Observed Outcomes
+#'
+#' Provides a framework for studying classification of rare outcomes under partial validation settings using surrogate variables.
+#' The methods are derived from Tan and Heagerty (2019), who proposed efficient sampling strategies for rare outcomes using surrogate variables in electronic medical record (EMR) data.
+#' The package includes tools to simulate high-dimensional binary data, implement surrogate-guided sampling (SGS) and simple random sampling (SRS) designs,
+#' and evaluate predictive models under outcome missingness. Methods include inverse probability weighting (IPW) for bias correction and functions for estimating performance metrics such as AUROC under complex sampling designs.
+#'
+#' @author Khue Tu Tran \email{trantk25@wfu.edu}
+#'
+#' @name rareSurrogate
+#' @section Main functions:
+#' \describe{
+#'   \item{\code{\link{sim_data}}}{
+#'   Simulate a complete dataset with predictors, surrogate outcome, and true outcome.}
+#'
+#'   \item{\code{\link{betas_gridsearch}}}{
+#'   Search over parameter values to match target operating characteristics.}
+#'
+#'   \item{\code{\link{sim_srs_val}}}{
+#'   Draw a simple random sample for validation.}
+#'
+#'   \item{\code{\link{sim_sgs_val}}}{
+#'   Draw a surrogate-guided validation sample.}
+#'
+#'   \item{\code{\link{auc_ipw}}}{
+#'   Compute an inverse probability weighted AUROC for partially validated outcomes.}
+#' }
+#'
+#' @references
+#' Tan, W. K., and Heagerty, P. J. (2019). Surrogate-guided sampling
+#' designs for classification of rare outcomes from electronic medical
+#' records data.
+#'
+#' @keywords internal
+"_PACKAGE"
