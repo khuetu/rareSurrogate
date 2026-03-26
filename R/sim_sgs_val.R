@@ -76,14 +76,16 @@ sim_sgs_val <- function(dat, n, npv, ppv, prop_Y = 0.5) {
     stop("Ropt is not finite. Check ppv, npv, and prop_Y.")
   }
   if (Ropt < 0 || Ropt > 1) {
-    stop(
+    warning(
       paste0(
         "`Ropt` = ", round(Ropt, 4), " is outside [0, 1]. ",
         "This combination of `ppv`, `npv`, and `prop_Y` is not feasible."
       )
     )
+    if (Ropt < 0) Ropt <- 0 ## if Ropt < 0 force to be 0
+    if (Ropt > 1) Ropt <- 1 ## if Ropt > 1 force to be 1
   }
-  message("Ropt = ", Ropt)
+  #message("Ropt = ", Ropt)
   dat$V_SGS = 1:nrow(dat) %in% ### Indicator of whether all row nums 1:N are contained within
     c(sample(x = which(dat$Ystar == 1),
              size = min(n * Ropt, length(which(dat$Ystar == 1)))),
