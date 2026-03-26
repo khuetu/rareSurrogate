@@ -1,4 +1,13 @@
-.Rproj.user
+# R / RStudio
+.Rproj.user/
 .Rhistory
 .RData
 .Ruserdata
+*.Rproj
+
+# Package build artifacts
+*.tar.gz
+*.Rcheck/
+
+# Operating system files
+.DS_Store
