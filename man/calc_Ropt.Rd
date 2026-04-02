@@ -18,7 +18,7 @@ calc_Ropt(dat, n, npv, ppv, prop_Y = 0.5)
 \item{prop_Y}{Target or assumed outcome prevalence. Default is `0.5`.}
 }
 \value{
-Scalar optimal proportion to validate from surrogate cases
+Vector of two scalars optimal proportion to validate from surrogate cases (with and without truncation)
 }
 \description{
 Create a surrogate-guided validation sample from a complete dataset

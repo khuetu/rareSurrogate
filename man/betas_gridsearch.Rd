@@ -4,7 +4,7 @@
 \alias{betas_gridsearch}
 \title{Grid search for parameters given target TNR and FPR (or TNR)}
 \usage{
-betas_gridsearch(N, grid, targets, betas_fixed, pX)
+betas_gridsearch(N, grid, targets, betas_fixed, pX, prop_Y = 0.5)
 }
 \arguments{
 \item{N}{Data size}
@@ -18,6 +18,8 @@ contain the columns `beta0`, `beta_surr`, and `pYstar`.}
 \item{betas_fixed}{Fixed coefficients in the logistic regression to model Y}
 
 \item{pX}{Marginal feature frequencies (should be in decreasing order)}
+
+\item{prop_Y}{Desired prevalance of the sample, used to calculate Ropt from each combination of betas}
 }
 \value{
 A data frame containing the candidate parameter values, the
@@ -37,7 +39,7 @@ grid <- expand.grid(
   beta_surr  = seq(-6, 6, by = 1),
   pYstar = seq(0.1, 0.95, by = 1)
 )
-targets <- c(prevalence = 0.1, TPR = 0.4, FPR = 0.95)
+targets <- c(prevalence = 0.1, TPR = 0.4, FPR = 0.05)
 betas_fixed <- c(rep(x = c(-0.5, -0.75, 0.25), times = 7)[-21], rep(x = 1, times = 10))
 pX    <- rexp(n = 30, rate = 6)
 pX <- sort(pX, decreasing = TRUE) ## sort from least- to most-frequent features

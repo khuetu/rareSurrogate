@@ -12,6 +12,7 @@
 #' `prevalence`, `TPR`, and `FPR`.
 #' @param betas_fixed Fixed coefficients in the logistic regression to model Y
 #' @param pX Marginal feature frequencies (should be in decreasing order)
+#' @param prop_Y Desired prevalance of the sample, used to calculate Ropt from each combination of betas
 #'
 #' @return A data frame containing the candidate parameter values, the
 #' corresponding simulated performance measures, and loss values
@@ -27,18 +28,19 @@
 #'   beta_surr  = seq(-6, 6, by = 1),
 #'   pYstar = seq(0.1, 0.95, by = 1)
 #' )
-#' targets <- c(prevalence = 0.1, TPR = 0.4, FPR = 0.95)
+#' targets <- c(prevalence = 0.1, TPR = 0.4, FPR = 0.05)
 #' betas_fixed <- c(rep(x = c(-0.5, -0.75, 0.25), times = 7)[-21], rep(x = 1, times = 10))
 #' pX    <- rexp(n = 30, rate = 6)
 #' pX <- sort(pX, decreasing = TRUE) ## sort from least- to most-frequent features
 #' results <- betas_gridsearch(N = 1000, grid, targets, betas_fixed, pX)
 #' head(results, 10)
 #' @export
-betas_gridsearch <- function(N, grid, targets, betas_fixed, pX) {
+betas_gridsearch <- function(N, grid, targets, betas_fixed, pX, prop_Y = 0.5) {
   ## POSSIBLE IMPROVEMENT: SEED
   num_features <- length(pX)
-  pX <- sort(pX, decreasing = TRUE) ## sort from least- to most-frequent features
-  simulate_metrics <- function(N, beta0, beta_surr, pYstar) {
+  pX <- sort(pX, decreasing = TRUE) ## sort from most-to-least-frequent features
+
+  simulate_metrics <- function(N, beta0, beta_surr, pYstar, prop_Y = 0.5) {
     # Generate Xmat exactly like your sim_data
     Xmat <- matrix(NA, nrow = N, ncol = num_features)
     for (i in 1:num_features) {
@@ -58,17 +60,28 @@ betas_gridsearch <- function(N, grid, targets, betas_fixed, pX) {
     TPR        <- mean(Ystar[Y == 1] == 1)
     FPR        <- mean(Ystar[Y == 0] == 1)
 
-    c(prevalence = prevalence, TPR = TPR, FPR = FPR)
+    PPV <- mean(Y[Ystar == 1] == 1)
+    NPV <- mean(Y[Ystar == 0] == 0)
+
+    denom <- PPV + NPV - 1
+    num <- prop_Y + NPV - 1
+
+    Ropt = num / denom
+
+    c(prevalence = prevalence, TPR = TPR, FPR = FPR, PPV = PPV, NPV = NPV, Ropt = Ropt)
   }
 
   # Run grid
   results <- grid |>
     dplyr::rowwise() |>
     dplyr::mutate(
-      metrics = list(simulate_metrics(N, .data$beta0, .data$beta_surr, .data$pYstar)),
+      metrics = list(simulate_metrics(N, .data$beta0, .data$beta_surr, .data$pYstar, prop_Y = 0.5)),
       prevalence = .data$metrics["prevalence"],
       TPR = .data$metrics["TPR"],
-      FPR = .data$metrics["FPR"]
+      FPR = .data$metrics["FPR"],
+      PPV = .data$metrics["PPV"],
+      NPV = .data$metrics["NPV"],
+      Ropt = .data$metrics["Ropt"]
     ) |>
     dplyr::select(-"metrics") |>
     dplyr::ungroup()

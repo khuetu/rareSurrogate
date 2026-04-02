@@ -75,6 +75,7 @@ sim_sgs_val <- function(dat, n, npv, ppv, prop_Y = 0.5) {
   if (!is.finite(Ropt)) {
     stop("Ropt is not finite. Check ppv, npv, and prop_Y.")
   }
+  Ropt0 <- Ropt
   if (Ropt < 0 || Ropt > 1) {
     warning(
       paste0(

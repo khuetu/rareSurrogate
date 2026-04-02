@@ -10,7 +10,7 @@
 #' @param prop_Y Target or assumed outcome prevalence. Default is `0.5`.
 #'
 #'
-#' @return Scalar optimal proportion to validate from surrogate cases
+#' @return Vector of two scalars optimal proportion to validate from surrogate cases (with and without truncation)
 #'
 #' @export
 calc_Ropt <- function(dat, n, npv, ppv, prop_Y = 0.5) {
@@ -32,19 +32,20 @@ calc_Ropt <- function(dat, n, npv, ppv, prop_Y = 0.5) {
       prop_Y < 0 || prop_Y > 1) {
     stop("`prop_Y` must be a single number in [0, 1].")
   }
-  
+
   denom <- ppv + npv - 1
   num <- prop_Y + npv - 1
-  
+
   if (abs(denom) < 1e-6) {
     stop("`ppv + npv - 1` is too close to 0, so `Ropt` is undefined.")
   }
-  
+
   ### optimal proportion sampled with Ystar = 1
   Ropt = num / denom
   if (!is.finite(Ropt)) {
     stop("Ropt is not finite. Check ppv, npv, and prop_Y.")
   }
+  Ropt0 <- Ropt
   if (Ropt < 0 || Ropt > 1) {
     warning(
       paste0(
@@ -55,5 +56,5 @@ calc_Ropt <- function(dat, n, npv, ppv, prop_Y = 0.5) {
     if (Ropt < 0) Ropt <- 0 ## if Ropt < 0 force to be 0
     if (Ropt > 1) Ropt <- 1 ## if Ropt > 1 force to be 1
   }
-  return(Ropt)
+  return(c(Ropt0, Ropt))
 }
